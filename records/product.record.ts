@@ -1,19 +1,41 @@
 import {ProductEntity} from "../types";
 import {pool} from "../utils/db";
-import {ProductRecordResults} from "../types/product/product";
+import {ProductRecordResults} from "../types";
+import {ValidationError} from "../utils/error";
 
-export class ProductRecord implements ProductEntity{
-    id?: string | null;
+export class ProductRecord implements ProductEntity {
+    id?: string | undefined;
     description: string;
     drawingNumber: string;
-    revision: number;
-    itemNumber?: string | null;
+    revision: string;
+    itemNumber?: string | undefined;
     moq: number;
     price: number;
-    offerNumber?: number | null;
+    offerNumber?: string | undefined;
 
     constructor(obj: ProductEntity) {
-        //obsluga bledow
+        if (!obj.description || obj.description.length > 50) {
+            throw new ValidationError('Opis nie może być pusty, jego maksymalna dopszczalna długość to 50 znaków');
+        }
+        if (!obj.drawingNumber || obj.drawingNumber.length > 20) {
+            throw new ValidationError('Numer rysunku nie może być pusty, jego maksymalna dopuszczalna długość to 20 znaków');
+        }
+        if (!obj.revision || Number(obj.revision) < 0 || Number(obj.revision) > 99) {
+            throw new ValidationError('Numer rewizji nie może być pusty, ujemny oraz jego maksymalna dopuszczalna długość to 2 znaki');
+        }
+        if (obj.itemNumber.length > 20) {
+            throw new ValidationError('Item number możem mieć maksymalnie 20 znaków');
+        }
+        if (obj.moq < 1) {
+            throw new ValidationError('Minimalna ilość zakupu to 1 sztuka');
+        }
+        if (obj.price > 99999.99 || obj.price < 0.01) {
+            throw new ValidationError('Cena powinna mieścić się w zakresie od 0.01 do 99999.99');
+        }
+        if (obj.offerNumber.length > 8) {
+            throw new ValidationError('Numer oferty nie może mieć więcej jak 8 znaków');
+        }
+
         this.id = obj.id;
         this.description = obj.description;
         this.drawingNumber = obj.drawingNumber;
@@ -25,9 +47,40 @@ export class ProductRecord implements ProductEntity{
 
     }
 
-    static async listAll(): Promise<ProductRecord[]>{
+    async insert(): Promise<void> {
+
+        //tworz uuid, jezeli brak item number to tworz pusta wartosc albo null? do sprawdzenia. Tak samo oferta
+
+    }
+
+    // moze być nie używana
+    static async getAll(): Promise<ProductRecord[]> {
         const [results] = await pool.execute('SELECT * FROM `products` ORDER BY `description` ASC') as ProductRecordResults;
         return results.map(obj => new ProductRecord(obj));
+    }
+
+    static async getOne(id: string): Promise<ProductRecord | null> {
+        const [results] = await pool.execute('SELECT * FROM `products` WHERE id=:id', {
+            id,
+        }) as ProductRecordResults;
+
+        return results.length === 0 ? null : new ProductRecord(results[0]);
+    }
+
+    static async findOne(drawingNumber: string): Promise<ProductRecord | null> {
+        const [results] = await pool.execute('SELECT * FROM `products` WHERE drawingNumber=:drawingNumber', {
+            drawingNumber,
+        }) as ProductRecordResults;
+
+        return results.length === 0 ? null : new ProductRecord(results[0]);
+    }
+
+    static async findAll(drawingNumber: string): Promise<ProductRecord[]> {
+        const [results] = await pool.execute('SELECT * FROM `products` WHERE `drawingNumber` LIKE :drawingNumber', {
+            drawingNumber: `%${drawingNumber}%`,
+        }) as ProductRecordResults;
+
+        return results.map(product => new ProductRecord(product));
     }
 
 }
