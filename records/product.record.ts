@@ -2,16 +2,17 @@ import {ProductEntity} from "../types";
 import {pool} from "../utils/db";
 import {ProductRecordResults} from "../types";
 import {ValidationError} from "../utils/error";
+import {v4 as uuid} from "uuid";
 
 export class ProductRecord implements ProductEntity {
-    id?: string | undefined;
+    id?: string;
     description: string;
     drawingNumber: string;
     revision: string;
-    itemNumber?: string | undefined;
+    itemNumber: string;
     moq: number;
     price: number;
-    offerNumber?: string | undefined;
+    offerNumber: string;
 
     constructor(obj: ProductEntity) {
         if (!obj.description || obj.description.length > 50) {
@@ -48,16 +49,17 @@ export class ProductRecord implements ProductEntity {
     }
 
     async insert(): Promise<void> {
+        if (!this.id) {
+            this.id = uuid();
+        } else {
+            throw new Error('ID already exists');
+        }
 
-        //tworz uuid, jezeli brak item number to tworz pusta wartosc albo null? do sprawdzenia. Tak samo oferta
+        await pool.execute('INSERT INTO `products`(`id`,`description`,`drawingNumber`,`revision`,`itemNumber`,`moq`,`price`,`offerNumber`) VALUES (:id,:description,:drawingNumber,:revision,:itemNumber,:moq,:price,:offerNumber)', this);
 
+        console.log()
     }
 
-    // moze być nie używana
-    static async getAll(): Promise<ProductRecord[]> {
-        const [results] = await pool.execute('SELECT * FROM `products` ORDER BY `description` ASC') as ProductRecordResults;
-        return results.map(obj => new ProductRecord(obj));
-    }
 
     static async getOne(id: string): Promise<ProductRecord | null> {
         const [results] = await pool.execute('SELECT * FROM `products` WHERE id=:id', {
@@ -65,6 +67,12 @@ export class ProductRecord implements ProductEntity {
         }) as ProductRecordResults;
 
         return results.length === 0 ? null : new ProductRecord(results[0]);
+    }
+
+    // moze być nie używana
+    static async getAll(): Promise<ProductRecord[]> {
+        const [results] = await pool.execute('SELECT * FROM `products` ORDER BY `description` ASC') as ProductRecordResults;
+        return results.map(obj => new ProductRecord(obj));
     }
 
     static async findOne(drawingNumber: string): Promise<ProductRecord | null> {

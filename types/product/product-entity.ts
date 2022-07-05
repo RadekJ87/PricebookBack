@@ -3,8 +3,8 @@ export interface ProductEntity {
     description: string,
     drawingNumber: string,
     revision: string,
-    itemNumber?: string | null,
-    moq:number,
+    itemNumber: string,
+    moq: number,
     price: number
-    offerNumber?: string | null,
+    offerNumber: string,
 }

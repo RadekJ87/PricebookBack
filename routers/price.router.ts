@@ -11,6 +11,13 @@ export const priceRouter = Router()
         // console.log(productsList);
     })
     .post('/', async (req: Request, res: Response): Promise<any> => {
-       const product = new ProductRecord(req.body);
-       console.log(product)
-    });
+        const product = new ProductRecord(req.body);
+
+        console.log(product);
+        await product.insert();
+
+        console.log('po', product);
+
+        res.json(product);
+    })
+

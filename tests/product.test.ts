@@ -40,7 +40,7 @@ test('ProductRecord returns array of found entries', async ()=>{
 
 
     expect(products).toBeDefined();
-    expect(products[0].moq).toBe(10);
+    expect(products[0].moq).toBeGreaterThanOrEqual(6);
 });
 
 test('ProductRecord returns array of products for search of drawings containing products phrase `25`', async ()=>{
@@ -52,3 +52,20 @@ test('ProductRecord returns array of products for search of drawings containing 
     expect(products.length). toBe(2);
     expect(products[0].description).toBe('Komoda');
 });
+
+test('ProductRecord returns empty array for search of data that not exist', async ()=>{
+    const products = await ProductRecord.findAll('agsd');
+
+    expect(products).toBeDefined();
+    expect(products).toEqual([]);
+});
+
+test('ProductRecord returns data of all found entries', async ()=>{
+    const products = await ProductRecord.getAll();
+
+    console.log(products);
+    expect(products).toBeDefined();
+    expect(products).not.toBe([]);
+    expect(products.length).toBeGreaterThanOrEqual(5);
+});
+
