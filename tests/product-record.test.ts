@@ -1,4 +1,5 @@
 import {ProductRecord} from "../records/product.record";
+import {pool} from "../utils/db";
 
 
 const basicObject = {
@@ -11,6 +12,9 @@ const basicObject = {
     offerNumber: ''
 };
 
+afterAll(async () => {
+    await pool.end();
+});
 
 test('Can build basic PriceRecord', () => {
     const product = new ProductRecord(basicObject);
