@@ -8,3 +8,4 @@ export const pool = createPool({
     namedPlaceholders: true,
     decimalNumbers: true,
 })
+// do przeniesienia do pliku .env

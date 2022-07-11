@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {ProductRecord} from "../records/product.record";
-import {ListProductsRes} from "../types/product/product";
+import {ListProductsRes} from "../types";
 
 export const priceRouter = Router()
 
@@ -10,6 +10,17 @@ export const priceRouter = Router()
                 productsList,
             } as ListProductsRes);
     })
+
+    // todo - wyswietlanie wszystkich produktow z ofery
+    .get('/:offerNumber', async (req: Request, res: Response): Promise<any> => {
+
+    })
+
+    // todo - aktualizja cen - globalana podwyzka lu obnizka cen produktow - metoda patch - tylko kolumna cena
+    .patch('/updateAll', async (req: Request, res: Response): Promise<any> => {
+
+    })
+
 
     .post('/', async (req: Request, res: Response): Promise<any> => {
         const product = new ProductRecord(req.body);
