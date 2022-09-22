@@ -56,8 +56,30 @@ export class ProductRecord implements ProductEntity {
         }
 
         await pool.execute('INSERT INTO `products`(`id`,`description`,`drawingNumber`,`revision`,`itemNumber`,`moq`,`price`,`offerNumber`) VALUES (:id,:description,:drawingNumber,:revision,:itemNumber,:moq,:price,:offerNumber)', this);
+    }
 
-        console.log()
+    static async update(percent: number): Promise<void> {
+        let fixedPercent = 1;
+
+        if(percent > 9 || percent < -9){
+            fixedPercent = Number(fixedPercent + '.' + Math.abs(percent));
+        } else if (percent === 1){
+            fixedPercent = 1;
+        } else {
+            fixedPercent = Number(fixedPercent + '.0' + Math.abs(percent));
+        }
+
+        if(percent < 0){
+            console.log('dol');
+            await pool.execute('UPDATE `products` SET `price`= `price`/ :percent', {
+                percent: fixedPercent,
+            });
+        } else {
+            console.log('gora');
+            await pool.execute('UPDATE `products` SET `price`= `price` * :percent', {
+                percent: fixedPercent,
+            });
+        }
     }
 
 

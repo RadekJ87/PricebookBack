@@ -17,12 +17,18 @@ export const priceRouter = Router()
     })
 
     // todo - aktualizja cen - globalana podwyzka lu obnizka cen produktow - metoda patch - tylko kolumna cena
-    .patch('/updateAll', async (req: Request, res: Response): Promise<any> => {
+    .patch('/update-prices', async (req: Request, res: Response): Promise<any> => {
+           const {percent} = req.body;
+           console.log(percent);
+           const test = await ProductRecord.update(percent);
 
+           res.json(`Prices changed by ${percent}`);
     })
 
 
     .post('/', async (req: Request, res: Response): Promise<any> => {
+        console.log('body', req.body);
+
         const product = new ProductRecord(req.body);
 
         console.log(product);
