@@ -1,4 +1,4 @@
-import {ProductEntity} from "../types";
+import {ListOfferRes, OfferEntity, ProductEntity} from "../types";
 import {pool} from "../utils/db";
 import {ProductRecordResults} from "../types";
 import {ValidationError} from "../utils/error";
@@ -108,6 +108,14 @@ export class ProductRecord implements ProductEntity {
     static async findAll(drawingNumber: string): Promise<ProductRecord[]> {
         const [results] = await pool.execute('SELECT * FROM `products` WHERE `drawingNumber` LIKE :drawingNumber', {
             drawingNumber: `%${drawingNumber}%`,
+        }) as ProductRecordResults;
+
+        return results.map(product => new ProductRecord(product));
+    }
+
+    static async getOfferDetails(offerNumber: string): Promise<ProductRecord[]>{
+        const [results] = await pool.execute('SELECT * FROM `products` WHERE `offerNumber` LIKE :offerNumber', {
+            offerNumber: `%${offerNumber}%`
         }) as ProductRecordResults;
 
         return results.map(product => new ProductRecord(product));

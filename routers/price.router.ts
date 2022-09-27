@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {ProductRecord} from "../records/product.record";
-import {ListProductsRes} from "../types";
+import {ListOfferRes, ListProductsRes} from "../types";
 
 export const priceRouter = Router()
 
@@ -12,8 +12,11 @@ export const priceRouter = Router()
     })
 
     // todo - wyswietlanie wszystkich produktow z ofery
-    .get('/:offerNumber', async (req: Request, res: Response): Promise<any> => {
-
+    .get('/offer/:offerNumber?', async (req: Request, res: Response): Promise<any> => {
+         const productsList = await ProductRecord.getOfferDetails(req.params.offerNumber ?? '');
+         res.json({
+             productsList,
+         } as ListProductsRes);
     })
 
     // todo - aktualizja cen - globalana podwyzka lu obnizka cen produktow - metoda patch - tylko kolumna cena
