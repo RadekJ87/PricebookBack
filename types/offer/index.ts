@@ -1,2 +1,2 @@
-export * from './offer-entity';
-export * from './offer';
+// export * from './offer-entity';
+// export * from './offer';

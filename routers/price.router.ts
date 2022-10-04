@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {ProductRecord} from "../records/product.record";
-import {ListOfferRes, ListProductsRes} from "../types";
+import {ListProductsRes} from "../types";
 
 export const priceRouter = Router()
 
@@ -22,8 +22,7 @@ export const priceRouter = Router()
     // todo - aktualizja cen - globalana podwyzka lu obnizka cen produktow - metoda patch - tylko kolumna cena
     .patch('/update-prices', async (req: Request, res: Response): Promise<any> => {
            const {percent} = req.body;
-           console.log(percent);
-           const test = await ProductRecord.update(percent);
+           await ProductRecord.update(percent);
 
            res.json(`Prices changed by ${percent}`);
     })

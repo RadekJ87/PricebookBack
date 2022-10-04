@@ -1,4 +1,4 @@
-import {ListOfferRes, OfferEntity, ProductEntity} from "../types";
+import {ProductEntity} from "../types";
 import {pool} from "../utils/db";
 import {ProductRecordResults} from "../types";
 import {ValidationError} from "../utils/error";
@@ -59,27 +59,19 @@ export class ProductRecord implements ProductEntity {
     }
 
     static async update(percent: number): Promise<void> {
-        let fixedPercent = 1;
+        let fixedPercent;
 
-        if(percent > 9 || percent < -9){
-            fixedPercent = Number(fixedPercent + '.' + Math.abs(percent));
-        } else if (percent === 1){
+        if (percent > 0) {
+            fixedPercent = 1 + Math.abs(percent/100);
+        } else if (percent < 0) {
+            fixedPercent = 1 - Math.abs(percent/100);
+        } else {
             fixedPercent = 1;
-        } else {
-            fixedPercent = Number(fixedPercent + '.0' + Math.abs(percent));
         }
 
-        if(percent < 0){
-            console.log('dol');
-            await pool.execute('UPDATE `products` SET `price`= `price`/ :percent', {
-                percent: fixedPercent,
-            });
-        } else {
-            console.log('gora');
-            await pool.execute('UPDATE `products` SET `price`= `price` * :percent', {
-                percent: fixedPercent,
-            });
-        }
+        await pool.execute('UPDATE `products` SET `price`= `price` * :percent', {
+            percent: fixedPercent,
+        });
     }
 
 
