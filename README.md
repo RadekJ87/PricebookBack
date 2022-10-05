@@ -8,7 +8,7 @@
 
 ## Wstęp - opis
 
-Hej! Pricebook to prosty cennik dla firm zajmujących się produkcją elementów stalowych.<br> Aplikację stworzyłem na własne potrzeby zawodowe, do szybkiej idendyfikacji cen produktów na podstawie numeru rysunku technniczego.
+Hej! Pricebook to prosty cennik dla firm zajmujących się produkcją elementów stalowych.<br> Aplikację stworzyłem na własne potrzeby zawodowe, do szybkiej identyfikacji cen produktów na podstawie numeru rysunku technicznego.
 <br>Powinna się sprawdzić nie tylko w przypadku mojego pracodawcy, ale także w innych przedsiębiorstwach zajmujących się szeroko rozumianą obróbką stali.
 Główne funcjonalności:
 - wyświetlanie zawartości cennika,

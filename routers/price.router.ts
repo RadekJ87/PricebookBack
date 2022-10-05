@@ -6,25 +6,25 @@ export const priceRouter = Router()
 
     .get('/:drawingNumber?', async (req: Request, res: Response): Promise<any> => {
         const productsList = await ProductRecord.findAll(req.params.drawingNumber ?? '');
-            res.json({
-                productsList,
-            } as ListProductsRes);
+        res.json({
+            productsList,
+        } as ListProductsRes);
     })
 
     // todo - wyswietlanie wszystkich produktow z ofery
     .get('/offer/:offerNumber?', async (req: Request, res: Response): Promise<any> => {
-         const productsList = await ProductRecord.getOfferDetails(req.params.offerNumber ?? '');
-         res.json({
-             productsList,
-         } as ListProductsRes);
+        const productsList = await ProductRecord.getOfferDetails(req.params.offerNumber ?? '');
+        res.json({
+            productsList,
+        } as ListProductsRes);
     })
 
     // todo - aktualizja cen - globalana podwyzka lu obnizka cen produktow - metoda patch - tylko kolumna cena
     .patch('/update-prices', async (req: Request, res: Response): Promise<any> => {
-           const {percent} = req.body;
-           await ProductRecord.update(percent);
+        const {percent} = req.body;
+        await ProductRecord.update(percent);
 
-           res.json(`Prices changed by ${percent}`);
+        res.json(`Prices changed by ${percent}`);
     })
 
 
@@ -39,5 +39,12 @@ export const priceRouter = Router()
         console.log('po', product);
 
         res.json(product);
+    })
+
+    .delete('/', async (req: Request, res: Response): Promise<any> => {
+        const {selectedProductId} = req.body;
+        console.log('body', selectedProductId);
+
+        res.json(selectedProductId);
     })
 
