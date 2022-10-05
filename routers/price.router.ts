@@ -19,10 +19,23 @@ export const priceRouter = Router()
         } as ListProductsRes);
     })
 
+    .get('/get-one/:id', async (req: Request, res: Response): Promise<any> => {
+        // console.log(req.params.id);
+        const product = await ProductRecord.getOne(req.params.id);
+        res.json(product);
+    })
+
+
+    .patch('/update-one/:id', async (req: Request, res: Response): Promise<any> => {
+        const updatedProduct = req.body;
+        const result = await ProductRecord.updateProductData(updatedProduct);
+        res.json(result);
+    })
+
     // todo - aktualizja cen - globalana podwyzka lu obnizka cen produktow - metoda patch - tylko kolumna cena
     .patch('/update-prices', async (req: Request, res: Response): Promise<any> => {
         const {percent} = req.body;
-        await ProductRecord.update(percent);
+        await ProductRecord.updatePrice(percent);
 
         res.json(`Prices changed by ${percent}`);
     })
@@ -43,8 +56,8 @@ export const priceRouter = Router()
 
     .delete('/', async (req: Request, res: Response): Promise<any> => {
         const {selectedProductId} = req.body;
-        console.log('body', selectedProductId);
+        const result = await ProductRecord.deleteOne(selectedProductId);
 
-        res.json(selectedProductId);
+        res.json(result);
     })
 
