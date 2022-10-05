@@ -59,13 +59,13 @@ export class ProductRecord implements ProductEntity {
         await pool.execute('INSERT INTO `products`(`id`,`description`,`drawingNumber`,`revision`,`itemNumber`,`moq`,`price`,`offerNumber`) VALUES (:id,:description,:drawingNumber,:revision,:itemNumber,:moq,:price,:offerNumber)', this);
     }
 
-    static async update(percent: number): Promise<void> {
+    static async updatePrice(percent: number): Promise<void> {
         let fixedPercent;
 
         if (percent > 0) {
-            fixedPercent = 1 + Math.abs(percent/100);
+            fixedPercent = 1 + Math.abs(percent / 100);
         } else if (percent < 0) {
-            fixedPercent = 1 - Math.abs(percent/100);
+            fixedPercent = 1 - Math.abs(percent / 100);
         } else {
             fixedPercent = 1;
         }
@@ -73,6 +73,21 @@ export class ProductRecord implements ProductEntity {
         await pool.execute('UPDATE `products` SET `price`= `price` * :percent', {
             percent: fixedPercent,
         });
+    }
+
+    static async updateProductData(obj: ProductEntity): Promise<string> {
+        const [result] = await pool.execute('UPDATE `products` SET `description`=:description, `drawingNumber`=:drawingNumber, `revision`=:revision, `itemNumber`=:itemNumber, `moq`=:moq, `price`=:price, `offerNumber`= :offerNumber WHERE `id` =:id', {
+            id: obj.id,
+            description: obj.description,
+            drawingNumber: obj.drawingNumber,
+            revision: obj.revision,
+            itemNumber: obj.itemNumber,
+            moq: obj.moq,
+            price: obj.price,
+            offerNumber: obj.offerNumber,
+        }) as RowDataPacket[];
+
+        return result.changedRows === 1 ? `Product with ID ${obj.id} has been modified` : 'Oops... Something gone wrong!';
     }
 
     static async deleteOne(id: string): Promise<String> {
