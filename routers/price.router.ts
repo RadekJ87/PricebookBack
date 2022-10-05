@@ -43,8 +43,8 @@ export const priceRouter = Router()
 
     .delete('/', async (req: Request, res: Response): Promise<any> => {
         const {selectedProductId} = req.body;
-        console.log('body', selectedProductId);
+        const result = await ProductRecord.deleteOne(selectedProductId);
 
-        res.json(selectedProductId);
+        res.json(result);
     })
 

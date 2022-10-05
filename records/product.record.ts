@@ -3,6 +3,7 @@ import {pool} from "../utils/db";
 import {ProductRecordResults} from "../types";
 import {ValidationError} from "../utils/error";
 import {v4 as uuid} from "uuid";
+import {RowDataPacket} from "mysql2";
 
 export class ProductRecord implements ProductEntity {
     id?: string;
@@ -74,6 +75,13 @@ export class ProductRecord implements ProductEntity {
         });
     }
 
+    static async deleteOne(id: string): Promise<String> {
+        const [results] = await pool.execute('DELETE FROM `products` WHERE `id`=:id', {
+            id,
+        }) as RowDataPacket[];
+
+        return results.affectedRows === 1 ? `Product with ID ${id} has been deleted` : 'Oops... Something gone wrong!';
+    }
 
     static async getOne(id: string): Promise<ProductRecord | null> {
         const [results] = await pool.execute('SELECT * FROM `products` WHERE id=:id', {
