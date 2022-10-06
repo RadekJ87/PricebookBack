@@ -8,21 +8,23 @@
 
 ## Wstęp - opis
 
+
 Hej! Pricebook to prosty cennik dla firm zajmujących się produkcją elementów stalowych.<br> Aplikację stworzyłem na własne potrzeby zawodowe, do szybkiej identyfikacji cen produktów na podstawie numeru rysunku technicznego.
 <br>Powinna się sprawdzić nie tylko w przypadku mojego pracodawcy, ale także w innych przedsiębiorstwach zajmujących się szeroko rozumianą obróbką stali.
 Główne funcjonalności:
 - wyświetlanie zawartości cennika,
 - wyszukiwanie rekordów po numerze rysunku,
 - dodawanie nowych produktów do cennika,
+- usuwanie produktów,
+- edytowanie produktów,
 - globalna zmiana cen na podstawie wskazanej podwyżki/obniżki procentowej,
 - wyświetlanie zawartości oferty handlowej,
 
 
 ## Demo
 
-Dostępne wkrótce
+[![IMAGE ALT TEXT HERE](https://raw.githubusercontent.com/RadekJ87/PricebookFront/main/public/pricebook_readme.png)](https://youtu.be/tKWCImPtX8c)
 
-[comment]: <> ([![IMAGE ALT TEXT HERE]&#40;https://raw.githubusercontent.com/RadekJ87/OfferGenerator/main/public/assets/images/readme_img.PNG&#41;]&#40;https://youtu.be/yL0xIbkTV5w&#41;)
 
 ## Technologia
 
