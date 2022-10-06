@@ -17,7 +17,7 @@ app.use(express.json());
 
 app.use(rateLimit({
     windowMs: 8 * 60 * 1000,
-    max: 50
+    max: 75
 }))
 
 // const router = Router();
